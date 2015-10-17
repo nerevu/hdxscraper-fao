@@ -15,4 +15,4 @@ SQLAlchemy==1.0.6
 requests==2.8.1
 scraperwiki==0.4.1
 schedule==0.3.2
-tabutils == 0.18.0
+tabutils == 0.18.1
