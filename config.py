@@ -9,7 +9,6 @@ _project = 'hdxscraper-fao'
 
 # configuration
 class Config(object):
-
     BASE_URL = 'http://faostat3.fao.org/faostat-bulkdownloads'
     TABLES = {
         'Shipments': 'Food_Aid_Shipments_WFP_E_All_Data.zip',
@@ -40,13 +39,13 @@ class Production(Config):
 
 class Development(Config):
     DEBUG = True
-    API_LIMIT = 50
+    CHUNK_SIZE = 2 ** 4
     ROW_LIMIT = 50
 
 
 class Test(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
     DEBUG = True
-    API_LIMIT = 10
+    CHUNK_SIZE = 2 ** 4
     ROW_LIMIT = 10
     TESTING = True

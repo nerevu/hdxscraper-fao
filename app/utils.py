@@ -88,14 +88,17 @@ def gen_data(config, location):
     url = '%s/%s' % (base_url, location)
     r = requests.get(url)
     zipfile = ZipFile(StringIO(r.content))
+    filename = zipfile.namelist()[0]
 
     # wrap in StringIO to access `seek`
-    f = StringIO(zipfile.open(zipfile.namelist()[0], mode='rU').read())
-    records = list(io.read_csv(f, sanitize=True, encoding=r.encoding))
+    f = StringIO(zipfile.open(filename, mode='rU').read())
+    records = io.read_csv(f, sanitize=True, encoding=r.encoding)
+    first = records.next()
+    reconstituted = it.chain([first], records)
     filterfunc = lambda x: x[0].startswith('y')
-    base = dict(it.ifilterfalse(filterfunc, records[0].items()))
+    base = dict(it.ifilterfalse(filterfunc, first.items()))
 
-    for record in records:
+    for record in reconstituted:
         values = it.ifilter(filterfunc, record.items())
 
         for addon in ({'year': v[0][1:], 'value': v[1]} for v in values):
