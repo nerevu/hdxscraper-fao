@@ -81,10 +81,9 @@ def setup():
 
 def populate():
     """Populates db with most recent data"""
-    limit = 0
-
     with app.app_context():
         for table_name, location in app.config['TABLES'].items():
+            count = 0
             table = getattr(models, table_name)
             row_limit = app.config['ROW_LIMIT']
             chunk_size = min(row_limit or 'inf', app.config['CHUNK_SIZE'])
@@ -105,7 +104,7 @@ def populate():
 
             for records in chunk(data, chunk_size):
                 in_count = len(records)
-                limit += in_count
+                count += in_count
 
                 if debug:
                     print(
@@ -117,13 +116,13 @@ def populate():
 
                 db.engine.execute(table.__table__.insert(), records)
 
-                if row_limit and limit >= row_limit:
+                if row_limit and count >= row_limit:
                     break
 
             if debug:
                 print(
                     'Successfully inserted %s records into the %s table!' % (
-                        limit, table_name))
+                        count, table_name))
 
 
 @manager.command
