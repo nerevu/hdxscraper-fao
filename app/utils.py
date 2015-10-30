@@ -70,10 +70,12 @@ def exception_handler(func):
 
 
 def run_or_schedule(job, schedule=False, exception_handler=None):
+    if exception_handler:
+        job = exception_handler(job)
+
     job()
 
     if schedule:
-        job = exception_handler(job) if exception_handler else job
         sch.every(1).day.at(_schedule_time).do(job)
 
         while True:
