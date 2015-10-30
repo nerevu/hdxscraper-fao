@@ -64,3 +64,52 @@ class Security(db.Model, ValidationMixin):
 
     def __repr__(self):
         return ('<Security(%r, %r)>' % (self.item, self.year))
+
+class Prices(db.Model, ValidationMixin):
+    # auto keys
+    id = db.Column(db.Integer, primary_key=True)
+    utc_created = db.Column(db.DateTime, nullable=False, default=dt.utcnow())
+    utc_updated = db.Column(
+        db.DateTime, nullable=False, default=dt.utcnow(), onupdate=dt.utcnow())
+
+    # other keys
+    item = db.Column(db.String(128), nullable=False)
+    item_code = db.Column(db.String(8), nullable=False)
+    element = db.Column(db.String(16), nullable=False)
+    element_code = db.Column(db.String(8), nullable=False)
+    country = db.Column(db.String(64), nullable=False)
+    country_code = db.Column(db.String(8), nullable=False)
+    unit = db.Column(db.String(32), nullable=False)
+    year = db.Column(db.String(16), nullable=False)
+    value = db.Column(db.String(32), nullable=False)
+
+    # validation
+    val.validates_constraints()
+
+    def __repr__(self):
+        return ('<Prices(%r, %r)>' % (self.item, self.year))
+
+class Indices(db.Model, ValidationMixin):
+    # auto keys
+    id = db.Column(db.Integer, primary_key=True)
+    utc_created = db.Column(db.DateTime, nullable=False, default=dt.utcnow())
+    utc_updated = db.Column(
+        db.DateTime, nullable=False, default=dt.utcnow(), onupdate=dt.utcnow())
+
+    # other keys
+    item = db.Column(db.String(128), nullable=False)
+    item_code = db.Column(db.String(8), nullable=False)
+    element = db.Column(db.String(16), nullable=False)
+    element_code = db.Column(db.String(8), nullable=False)
+    country = db.Column(db.String(64), nullable=False)
+    country_code = db.Column(db.String(8), nullable=False)
+    unit = db.Column(db.String(32), nullable=False)
+    year = db.Column(db.String(16), nullable=False)
+    value = db.Column(db.String(32), nullable=False)
+
+    # validation
+    val.validates_constraints()
+
+    def __repr__(self):
+        return ('<Indices(%r, %r)>' % (self.item, self.year))
+

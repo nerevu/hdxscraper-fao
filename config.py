@@ -14,6 +14,8 @@ class Config(object):
     TABLES = {
         'Shipments': 'Food_Aid_Shipments_WFP_E_All_Data.zip',
         'Security': 'Food_Security_Data_E_All_Data.zip',
+        'Prices': 'Prices_E_All_Data.zip',
+        'Indices': 'Price_Indices_E_All_Data.zip',
     }
 
     SQLALCHEMY_DATABASE_URI = 'sqlite:///%s' % p.join(_basedir, _db_name)
