@@ -27,7 +27,7 @@ from StringIO import StringIO
 from zipfile import ZipFile
 
 from config import _project
-from tabutils import io, process as pr
+from tabutils import io, process as pr, fntools as ft
 
 _basedir = p.dirname(__file__)
 _parentdir = p.dirname(_basedir)
@@ -99,4 +99,5 @@ def gen_data(config, location):
         values = it.ifilter(filterfunc, record.items())
 
         for addon in ({'year': v[0][1:], 'value': v[1]} for v in values):
-            yield pr.merge([base, addon])
+            if not ft.is_null(addon['value'], blanks_as_nulls=True):
+                yield pr.merge([base, addon])
