@@ -97,6 +97,7 @@ The results will be stored in a SQLite database `scraperwiki.sqlite`.
     source venv/bin/activate
     screen manage -m Scraper run
     # Now press `Ctrl-a d`
+    manage update
 
 ## Configuration
 
