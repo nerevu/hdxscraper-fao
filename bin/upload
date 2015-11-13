@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -u
+#!/usr/bin/env bash
 # Creates private datasets in CKAN
 # usage bin/upload
 
