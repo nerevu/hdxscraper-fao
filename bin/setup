@@ -4,7 +4,7 @@
 # Install requirements and setup database
 
 rm -rf tool
-git clone https://github.com/reubano/hdxscraper-acled.git tool
+git clone https://github.com/reubano/hdxscraper-fao.git tool
 cd tool
 virtualenv venv
 source venv/bin/activate
