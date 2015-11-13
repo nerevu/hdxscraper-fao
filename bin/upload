@@ -1,0 +1,41 @@
+#!/usr/bin/env bash -u
+# Creates private datasets in CKAN
+# usage bin/upload
+
+if [ $# -gt 0 ]; then
+  if [ "$1" == 'prod' ]; then
+    URL=`printenv CKAN_PROD_URL`
+  else
+    URL=`printenv CKAN_REMOTE_URL`
+  fi
+else
+  URL=`printenv CKAN_REMOTE_URL`
+fi
+
+OID="fao"
+BASE="https://ds-ec2.scraperwiki.com/k4qrnvg/hzdt84kflovzsv6/cgi-bin/csv"
+TSOURCE="Food and Agriculture Organization"
+TAGS="Food"
+METHODOLOGY="http://faostat3.fao.org/mes/methodology_list/E"
+
+echo "Uploading data to $URL..."
+
+{
+  read
+  while read -r line || [[ -n "$line" ]]; do
+    IFS=$'\t'
+    ROW=($line)
+
+    ckanny pk.create \
+      -ps "$TSOURCE" \
+      -t "${ROW[0]}" \
+      -n "${ROW[0]}" \
+      -S "${ROW[2]}" \
+      -f "${BASE}/${ROW[1]}.csv" \
+      -e "${ROW[3]}"
+      -T "$TAGS" \
+      -m "$METHODOLOGY" \
+      -r "$URL" \
+      "$OID"
+  done
+} < "datasets/tables.tsv"

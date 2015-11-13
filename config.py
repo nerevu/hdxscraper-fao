@@ -1,22 +1,38 @@
+# -*- coding: utf-8 -*-
+# vim: sw=4:ts=4:expandtab
+
+"""
+config
+~~~~~~
+
+Provides app configuration settings
+"""
+
+from __future__ import (
+    absolute_import, division, print_function, with_statement,
+    unicode_literals)
+
 from os import path as p
 
-# module vars
-_basedir = p.dirname(__file__)
-_parentdir = p.dirname(_basedir)
-_db_name = 'scraperwiki.sqlite'
-_project = 'hdxscraper-fao'
+BASEDIR = p.dirname(__file__)
+PARENTDIR = p.dirname(BASEDIR)
+DB_NAME = 'scraperwiki.sqlite'
+RECIPIENT = 'reubano@gmail.com'
 
 
-# configuration
 class Config(object):
-
+    suffix = '_E_All_Data.zip'
     BASE_URL = 'http://faostat3.fao.org/faostat-bulkdownloads'
-    TABLES = {
-        'Shipments': 'Food_Aid_Shipments_WFP_E_All_Data.zip',
-        'Security': 'Food_Security_Data_E_All_Data.zip',
-    }
+    BASE_URL_ALT = 'http://data.fao.org/developers/api/v1/en/resources'
+    TABLES = [
+        {'name': 'shipments', 'location': 'Food_Aid_Shipments_WFP%s' % suffix},
+        {'name': 'security', 'location': 'Food_Security_Data%s' % suffix},
+        {'name': 'prices', 'location': 'Prices%s' % suffix},
+        {'name': 'indices', 'location': 'Price_Indices%s' % suffix},
+    ]
 
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///%s' % p.join(_basedir, _db_name)
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///%s' % p.join(BASEDIR, DB_NAME)
+    LOGFILE = p.join(BASEDIR, 'http', 'log.txt')
     API_LIMIT = 1000
     SW = False
     DEBUG = False
@@ -29,7 +45,8 @@ class Config(object):
 class Scraper(Config):
     PROD = True
     SW = True
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///%s' % p.join(_parentdir, _db_name)
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///%s' % p.join(PARENTDIR, DB_NAME)
+    LOGFILE = p.join(PARENTDIR, 'http', 'log.txt')
 
 
 class Production(Config):
@@ -38,13 +55,13 @@ class Production(Config):
 
 class Development(Config):
     DEBUG = True
-    API_LIMIT = 50
+    CHUNK_SIZE = 2 ** 4
     ROW_LIMIT = 50
 
 
 class Test(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
     DEBUG = True
-    API_LIMIT = 10
+    CHUNK_SIZE = 2 ** 4
     ROW_LIMIT = 10
     TESTING = True

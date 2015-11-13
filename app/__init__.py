@@ -14,6 +14,18 @@ import config
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 
+__version__ = '0.9.0'
+
+__title__ = 'hdxscraper-fao'
+__author__ = 'Reuben Cummings'
+__description__ = (
+    'Collector for UN Food and Agriculture Organization (FAO) Humanitarian'
+    'Data')
+
+__email__ = 'reubano@gmail.com'
+__license__ = 'MIT'
+__copyright__ = 'Copyright 2015 Reuben Cummings'
+
 db = SQLAlchemy()
 
 
