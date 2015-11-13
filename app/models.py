@@ -65,6 +65,7 @@ class Security(db.Model, ValidationMixin):
     def __repr__(self):
         return ('<Security(%r, %r)>' % (self.item, self.year))
 
+
 class Prices(db.Model, ValidationMixin):
     # auto keys
     id = db.Column(db.Integer, primary_key=True)
@@ -89,6 +90,7 @@ class Prices(db.Model, ValidationMixin):
     def __repr__(self):
         return ('<Prices(%r, %r)>' % (self.item, self.year))
 
+
 class Indices(db.Model, ValidationMixin):
     # auto keys
     id = db.Column(db.Integer, primary_key=True)
@@ -112,4 +114,3 @@ class Indices(db.Model, ValidationMixin):
 
     def __repr__(self):
         return ('<Indices(%r, %r)>' % (self.item, self.year))
-

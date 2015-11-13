@@ -1,5 +1,4 @@
 import sys
-
 from os import path as p
 from config import _project
 
