@@ -3,6 +3,9 @@
 
 # Install requirements and setup database
 
+rm -rf tool
+git clone https://github.com/reubano/hdxscraper-acled.git tool
+cd tool
 virtualenv venv
 source venv/bin/activate
 pip install -r requirements.txt

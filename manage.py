@@ -4,15 +4,17 @@ from __future__ import (
     unicode_literals)
 
 import os.path as p
+import swutils
+import config
 
 from subprocess import call
+from functools import partial
 
-from pprint import pprint
 from flask import current_app as app
 from flask.ext.script import Manager
-from tabutils.fntools import chunk
+from tabutils.process import merge
 
-from app import create_app, db, utils, models
+from app import create_app, db, utils, models, __title__
 
 manager = Manager(create_app)
 manager.add_option('-m', '--mode', default='Development')
@@ -79,58 +81,29 @@ def setup():
         createdb()
 
 
-def populate():
-    """Populates db with most recent data"""
-    with app.app_context():
-        for table_name, location in app.config['TABLES'].items():
-            count = 0
-            table = getattr(models, table_name)
-            row_limit = app.config['ROW_LIMIT']
-            chunk_size = min(row_limit or 'inf', app.config['CHUNK_SIZE'])
-            debug, test = app.config['DEBUG'], app.config['TESTING']
-
-            if test:
-                createdb()
-
-            data = utils.gen_data(app.config, location)
-
-            del_count = table.query.delete(synchronize_session=False)
-            db.session.commit()
-
-            if debug:
-                print(
-                    'Deleted %s records from the %s table...' % (
-                        del_count, table_name))
-
-            for records in chunk(data, chunk_size):
-                in_count = len(records)
-                count += in_count
-
-                if debug:
-                    print(
-                        'Inserting %s records into the %s table...' % (
-                            in_count, table_name))
-
-                if test:
-                    pprint(records)
-
-                db.engine.execute(table.__table__.insert(), records)
-
-                if row_limit and count >= row_limit:
-                    break
-
-            if debug:
-                print(
-                    'Successfully inserted %s records into the %s table!' % (
-                        count, table_name))
-
-
 @manager.command
 def run():
     """Populates all tables in db with most recent data"""
     with app.app_context():
-        sw = app.config['SW']
-        utils.run_or_schedule(populate, sw, utils.exception_handler)
+        args = (config.RECIPIENT, app.config['LOGFILE'], __title__)
+        exception_handler = swutils.ExceptionHandler(*args).handler
+        kwargs = merge([app.config, {'models': models}])
+        job = partial(swutils.populate, utils.gen_data, db.engine, **kwargs)
+        swutils.run_or_schedule(job, app.config['SW'], exception_handler)
+
+
+@manager.option(
+    '-s', '--stag', help='upload to staging site', action='store_true')
+def upload(stag=False):
+    """Upload files to HDX"""
+    call([p.join(_basedir, 'bin', 'upload'), 'stag' if stag else 'prod'])
+
+
+@manager.option(
+    '-s', '--stag', help='upload to staging site', action='store_true')
+def update(stag=False):
+    """Update dataset metadata"""
+    call([p.join(_basedir, 'bin', 'update'), 'stag' if stag else 'prod'])
 
 
 if __name__ == '__main__':

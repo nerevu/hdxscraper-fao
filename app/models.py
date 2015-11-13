@@ -11,7 +11,6 @@ from __future__ import (
 
 import savalidation.validators as val
 
-from datetime import datetime as dt
 from app import db
 from savalidation import ValidationMixin
 
@@ -19,9 +18,6 @@ from savalidation import ValidationMixin
 class Shipments(db.Model, ValidationMixin):
     # auto keys
     id = db.Column(db.Integer, primary_key=True)
-    utc_created = db.Column(db.DateTime, nullable=False, default=dt.utcnow())
-    utc_updated = db.Column(
-        db.DateTime, nullable=False, default=dt.utcnow(), onupdate=dt.utcnow())
 
     # other keys
     item = db.Column(db.String(128), nullable=False)
@@ -44,9 +40,6 @@ class Shipments(db.Model, ValidationMixin):
 class Security(db.Model, ValidationMixin):
     # auto keys
     id = db.Column(db.Integer, primary_key=True)
-    utc_created = db.Column(db.DateTime, nullable=False, default=dt.utcnow())
-    utc_updated = db.Column(
-        db.DateTime, nullable=False, default=dt.utcnow(), onupdate=dt.utcnow())
 
     # other keys
     item = db.Column(db.String(128), nullable=False)
@@ -69,9 +62,6 @@ class Security(db.Model, ValidationMixin):
 class Prices(db.Model, ValidationMixin):
     # auto keys
     id = db.Column(db.Integer, primary_key=True)
-    utc_created = db.Column(db.DateTime, nullable=False, default=dt.utcnow())
-    utc_updated = db.Column(
-        db.DateTime, nullable=False, default=dt.utcnow(), onupdate=dt.utcnow())
 
     # other keys
     item = db.Column(db.String(128), nullable=False)
@@ -94,9 +84,6 @@ class Prices(db.Model, ValidationMixin):
 class Indices(db.Model, ValidationMixin):
     # auto keys
     id = db.Column(db.Integer, primary_key=True)
-    utc_created = db.Column(db.DateTime, nullable=False, default=dt.utcnow())
-    utc_updated = db.Column(
-        db.DateTime, nullable=False, default=dt.utcnow(), onupdate=dt.utcnow())
 
     # other keys
     item = db.Column(db.String(128), nullable=False)
