@@ -90,13 +90,11 @@ The results will be stored in a SQLite database `scraperwiki.sqlite`.
 
     manage update -s
 
-## Update ScraperWiki box with new code
+*ScraperWiki box*
 
+    make update
     cd tool
-    git reset --hard HEAD
-    git pull
     source venv/bin/activate
-    pip install -r requirements.txt
     screen manage -m Scraper run
     # Now press `Ctrl-a d`
 
