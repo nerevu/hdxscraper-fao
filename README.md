@@ -42,6 +42,9 @@ hdxscraper-fao requires the following in order to run properly:
 
 *ScraperWiki Box*
 
+    rm -rf tool
+    git clone https://github.com/reubano/hdxscraper-fao.git tool
+    cd tool
     make setup
 
 ## Usage
@@ -73,24 +76,13 @@ The results will be stored in a SQLite database `scraperwiki.sqlite`.
 
     manage upload -s
 
-## Update tables on [HDX](http://data.hdx.rwlabs.org/)/[CKAN](http://ckan.org/) with new metadata
+## Update ScraperWiki box with new code
 
-*update dataset on production site*
-
-    manage update
-
-*update dataset on staging site*
-
-    manage update -s
-
-*ScraperWiki box*
-
-    make update
     cd tool
+    make update
     source venv/bin/activate
     screen manage -m Scraper run
     # Now press `Ctrl-a d`
-    manage update
 
 ## Configuration
 
