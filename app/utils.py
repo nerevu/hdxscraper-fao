@@ -33,10 +33,7 @@ def get_file(location, **kwargs):
     return f, 'csv', r.encoding
 
 
-def gen_data(location=None, **kwargs):
-    """Generates records from csv"""
-    f, ext, encoding = get_file(location, **kwargs)
-    records = io.read_csv(f, sanitize=True, encoding=encoding)
+def normalize(records, **kwargs):
     first = records.next()
     reconstituted = it.chain([first], records)
     filterfunc = lambda x: x[0].startswith('y')
@@ -48,6 +45,13 @@ def gen_data(location=None, **kwargs):
         for addon in ({'year': v[0][1:], 'value': v[1]} for v in values):
             if not ft.is_null(addon['value'], blanks_as_nulls=True):
                 yield pr.merge([base, addon])
+
+
+def gen_data(location=None, **kwargs):
+    """Generates records from csv"""
+    f, ext, encoding = get_file(location, **kwargs)
+    records = io.read_csv(f, sanitize=True, encoding=encoding)
+    return normalize(records)
 
 
 def gen_data_alt(**kwargs):
