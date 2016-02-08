@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Creates private datasets in CKAN
-# usage bin/upload
+# usage bin/update
 
 if [ $# -gt 0 ]; then
   if [ "$1" == 'prod' ]; then
